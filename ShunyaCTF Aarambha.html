@@ -1,0 +1,754 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>ShunyaCTF Aarambha</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="d78f1ef5-f76f-46ad-a48e-fe2e01e24dc7" class="page sans"><header><h1 class="page-title">ShunyaCTF Aarambha</h1><p class="page-description"></p></header><div class="page-body"><p id="d2b8bdaf-dc3e-4f96-b42d-413bea62c6f0" class="">
+</p><h1 id="6cd7f62a-1216-4578-adaf-120b819fd07e" class="">Crypto / <strong><strong>AESthetic challenge</strong></strong></h1><p id="3551c3dd-bf24-45a7-8ec2-bba7bcba958d" class="">
+</p><p id="f72b3a18-ff4d-470e-98f7-5ae68311ec7a" class="">We were given with two audios and ciphertext , these audios were actually morse code. Audio 1 was <code>iv</code> and Audio 2 was <code>key</code> in morse code so decoding it using website <a href="https://databorder.com/transfer/morse-sound-receiver/">https://databorder.com/transfer/morse-sound-receiver</a>  we get the result with some errors.<br/><br/></p><figure id="4605e73f-c4d2-478a-919d-11c55ffba64c" class="image"><a href="ShunyaCTF%20Aarambha%20d78f1ef5f76f46ada48efe2e01e24dc7/Screenshot_from_2024-04-15_19-22-31.png"><img style="width:1165px" src="ShunyaCTF%20Aarambha%20d78f1ef5f76f46ada48efe2e01e24dc7/Screenshot_from_2024-04-15_19-22-31.png"/></a></figure><figure id="533e66ee-f8de-4068-90d3-49c94331c563" class="image"><a href="ShunyaCTF%20Aarambha%20d78f1ef5f76f46ada48efe2e01e24dc7/Screenshot_from_2024-04-15_19-21-00.png"><img style="width:1165px" src="ShunyaCTF%20Aarambha%20d78f1ef5f76f46ada48efe2e01e24dc7/Screenshot_from_2024-04-15_19-21-00.png"/></a></figure><p id="65cb3a54-ca5d-4a6e-a941-2e5fa983cb25" class="">
+</p><p id="2ec1dbd3-b66c-4882-a821-906c4d0f94e6" class="">Seeing the pattern we can easily guess <code>iv = 0x000102030405060708090A0B0C0D0E0F</code>  and <code>key = YOUGOTTHEKEYNJOY</code> . Now we can easily decrypt the cipher text using the script.</p><p id="01c937f6-af22-4c60-963a-67c2957dc23f" class="">
+</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="97c3d0b5-c147-49db-b9fe-c2882c9659ff" class="code"><code class="language-Python">from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
+from Crypto.Util.number import bytes_to_long
+
+def decrypt_aes_cbc(key, iv, ciphertext):
+    cipher = AES.new(key, AES.MODE_CBC, iv)
+    plaintext = cipher.decrypt(ciphertext)
+    return plaintext
+
+def main():
+    key = &#x27;YOUGOTTHEKEYNJOY&#x27;.lower().encode()
+    iv = &quot;0x000102030405060708090a0b0c0d0e0f&quot;[2:]
+    ciphertext = &quot;69d5deb91a001151db5d98231574a51779acd1a84b9338a6750697c0af7e4591&quot;
+    ciphertext = bytes.fromhex(ciphertext)
+    iv = bytes.fromhex(iv)
+    
+    plaintext = decrypt_aes_cbc(key, iv, ciphertext)
+    print(&quot;Decrypted plaintext:&quot;, plaintext)
+
+main()</code></pre><p id="ecd36c01-062d-469d-bc73-acb56c8441fb" class="">
+</p><p id="8baf18a2-3c74-480b-81e0-9d316da2c871" class="">We get output : <br/>Decrypted plaintext: b&#x27;0CTF{d4sh_und3rsc0r3_d0t!}\x06\x06\x06\x06\x06\x06’<br/></p><p id="bbecd016-abd2-426d-9750-2bbc305f515a" class="">
+</p><p id="1cfaac49-457d-4ede-ac9d-beba0691473e" class="">Flag : <code>0CTF{d4sh_und3rsc0r3_d0t!}</code></p><p id="6fc20991-3246-4401-a7cb-be2744512c23" class="">
+</p><p id="aa505e32-b9c1-453e-9e66-801b442f0a39" class="">
+</p><h1 id="17a62e4d-1837-45d0-bfd3-625fa857016b" class="">Crypto / <strong><strong>Rivest Salted Adleman</strong></strong></h1><p id="a72b073a-68cd-48ea-8480-28fc5e6790ed" class="">
+</p><p id="083b0991-a671-4de3-b624-b68b86b2b0d9" class="">We were given <code>p , salted q , salted n , e  and ciphertext</code> , Now as per question it seems like <code>q</code> has been modified and more the word <code>eksored</code> hinted like it was XORed with some value.<br/>At first sight it seemed like <br/><code>q</code> has been xored with one of the digits between <code>1 - 9</code> , but neither of them gave prime number.<br/>Now I got hint from the line <br/><code>1 thru 9</code> it seems like q has been xored with <code>123456789</code> , Holla It worked i got q as prime. Now I was confident then this is the right approach. I directly went to the website <a href="https://www.dcode.fr/rsa-cipher">https://www.dcode.fr/rsa-cipher</a> , and got the flag.</p><figure id="16c69a61-0b50-408e-bb2a-05f07e698217" class="image"><a href="ShunyaCTF%20Aarambha%20d78f1ef5f76f46ada48efe2e01e24dc7/Screenshot_from_2024-04-15_19-45-19.png"><img style="width:708px" src="ShunyaCTF%20Aarambha%20d78f1ef5f76f46ada48efe2e01e24dc7/Screenshot_from_2024-04-15_19-45-19.png"/></a></figure><p id="ff95a713-db15-495d-aed9-3457999a75e7" class="">
+</p><p id="e3cef421-3138-4944-8061-69c3d94483c4" class="">Flag : <code>0CTF{4sa_1s_l0v3}</code></p><p id="4eb1ed82-4ae8-4380-95a4-8cc073bd076c" class="">
+</p><h1 id="6d1a25c8-8b65-4e39-8946-1366525edf13" class="">Crypto / <strong><strong>Echoes of Encryption</strong></strong></h1><p id="79ea5e6a-1b3c-47fe-b93e-34a83e27de69" class="">
+</p><p id="2407413f-9797-4a11-9440-1b9b5c30e7b3" class="">We got <code>ciphertext</code> and <code><a href="http://encrypt.py">encrypt.py</a></code> file seeing the encryption script we just have to find the seed so that exact random leters could be generated. Now i was unable to guess the seed from the given description so i decided to do bruteforce it.<br/>Now since we know that flag starts with <br/><code>0CTF{</code> so i XORed it with ciphertext to get the starting random letters, then this script will decrypt this.</p><p id="8c27a247-8bf5-4dc0-a5c2-64067cd96ce1" class="">
+</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5a85923e-a061-4cb5-81d1-c201a630dc9f" class="code"><code class="language-Python">from pwn import xor
+import random
+import string
+
+data = &quot;0CTF{&quot;.encode()
+ciphertext = bytes.fromhex(&quot;5e04610a22042638723c571e1a5436142764061f39176b4414204636251072220a35583a60234d2d28082b&quot;)
+key = b&quot;&quot;
+
+for i in range(5):
+    key += xor(data[i],ciphertext[i])
+
+key = key.decode()
+
+def findkey(l, seed):
+    random.seed(seed)    
+    allowed_chars = string.ascii_letters + string.digits
+    key = &#x27;&#x27;.join(random.choices(allowed_chars, k=l))
+    return key
+
+seed = -1
+for i in range(10000000000000):
+    k = findkey(len(ciphertext),i)
+    if k[:5] == key:
+        seed = i
+        print(i)
+        break
+
+k = findkey(seed)
+plaintext = &#x27;&#x27;
+for i in range(len(ciphertext)):
+    decrypt = chr(ord(ciphertext[i]) ^ ord(k[i]))
+    plaintext += decrypt
+print(plaintext)</code></pre><p id="c5a4e4e7-7ca2-437b-aff8-815a90380ff2" class="">
+</p><p id="eaedd6ce-fe0e-4a6f-a7df-59ce16e95d55" class="">Although it took lots of time but we got the flag.</p><p id="67c7d8d9-89a8-40e9-9dc7-e38cabe25516" class="">
+</p><h1 id="dc3e3a82-ba40-46f5-8a59-d6919c282bf8" class="">Forensics / <strong><strong>Check Research and Check again</strong></strong></h1><p id="1ac03d5a-0d7d-4444-a9f1-f4685c7a4270" class="">
+</p><p id="1d933d8b-af76-4de9-ba91-7d8b2a3a316b" class="">We were given a PNG image with wrong footer as suggested in decription. So i put it into the website <a href="https://www.nayuki.io/page/png-file-chunk-inspector">https://www.nayuki.io/page/png-file-chunk-inspector</a> which tells the errors in PNG. Now using hex editor we can correct it and get the flag. </p><p id="af2e8209-7d45-4fb1-9edf-869d116ce9a4" class="">
+</p><figure id="2d581184-be47-4b9c-ad34-d3d0063946c7" class="image"><a href="ShunyaCTF%20Aarambha%20d78f1ef5f76f46ada48efe2e01e24dc7/image1.png"><img style="width:1138px" src="ShunyaCTF%20Aarambha%20d78f1ef5f76f46ada48efe2e01e24dc7/image1.png"/></a></figure><p id="28bbb724-3920-447b-b34c-a2c61dd5778a" class="">
+</p><p id="f2b182d0-d8aa-4e9e-b826-6c2730285bfd" class="">We can see that the highligted values are wrong and they must be 00 so change them, Similarily we can see more errors exist and can be corrected using the help of website and finally we get the flag. It was a very tediuos question but at last getting flag paid off !</p><p id="c5cdb718-e469-4077-aaea-f0b7da286607" class="">
+</p><p id="9772852d-edff-4607-a2de-4774717c0213" class="">
+</p><h1 id="f3c75fb7-5969-4afd-b541-681ed96116e9" class="">OSINT / BIBBA Part 3</h1><p id="6e1e9f77-304e-495d-bd6e-10ffc85c34ce" class="">
+</p><p id="fd523843-7339-4288-8edb-e2c0f944d5f1" class="">Battle of Garibpur happened in confilict of Bangladesh and Bengal side, hence Garib pur near border has the coordinates</p><p id="51c7d3b1-4e4d-49d5-b90a-72280d548088" class="">Bengal one didn’t work</p><p id="14caba15-20f2-4779-82d7-5275ee0d6960" class="">Tweaking Bangldesh one, which was more probable gave us accepted<br/><br/></p><figure id="88095ddc-1654-44c9-803a-618c4d067cbc" class="image"><a href="ShunyaCTF%20Aarambha%20d78f1ef5f76f46ada48efe2e01e24dc7/Untitled.png"><img style="width:963px" src="ShunyaCTF%20Aarambha%20d78f1ef5f76f46ada48efe2e01e24dc7/Untitled.png"/></a></figure><p id="bf716c2e-f50d-4403-863e-00d0d9db9b1a" class="">
+</p><h3 id="dbc850d5-ae75-49f8-a277-4047debfa8e2" class="">Flag: <code>0CTF{23.23,89.04}</code></h3><p id="78722f63-6fc4-4959-9069-669a9ad254e2" class="">
+</p><h1 id="fe469c3d-1fa2-4949-877f-66677ee23622" class="">OSINT / Uncover the Tea</h1><p id="9e3290b8-0344-479e-98ea-3e1eb658aa6e" class="">
+</p><p id="5057198a-d65f-4969-8d7b-18c74ecbe891" class="">We started by searching snippets of the question.</p><figure id="e2f15711-9e29-40c6-a417-22d998da5d3b" class="image"><a href="ShunyaCTF%20Aarambha%20d78f1ef5f76f46ada48efe2e01e24dc7/Untitled%201.png"><img style="width:708px" src="ShunyaCTF%20Aarambha%20d78f1ef5f76f46ada48efe2e01e24dc7/Untitled%201.png"/></a></figure><p id="70d1a637-250e-436c-871e-599cd6db5dbc" class="">Trying combinations with eminem and iggy doesnt help much</p><p id="8d8c7873-021d-41df-b101-8c6fe82ca7dc" class="">Also I found a fight of Taylor Swift but she is not a rapper</p><p id="85fd9179-5c38-4a2d-8085-76bea15ba671" class="">Then i got an article that state fights of those hip hop aritsts<br/><br/></p><figure id="8168a0eb-709f-43c9-b897-0e9e92447e61"><a href="https://economictimes.indiatimes.com/magazines/panache/meet-the-85-year-old-foodpreneur-who-has-become-an-internet-sensation-in-just-6-months/articleshow/109318885.cms" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Meet the 85-year-old foodpreneur, who has become an Internet sensation in just 6 months!</div><div class="bookmark-description">Speaking with Humans Of Bombay, Nischal revealed her lifelong affinity for the culinary arts, inspired by her father&#x27;s culinary prowess. Together with him, she often prepared family dinners. Despite her aspirations to pursue something of her own, that dream remained elusive for over six decades.</div></div><div class="bookmark-href"><img src="https://economictimes.indiatimes.com/thumb/width-120,height-120,msid-75267040/et.jpg" class="icon bookmark-icon"/>https://economictimes.indiatimes.com/magazines/panache/meet-the-85-year-old-foodpreneur-who-has-become-an-internet-sensation-in-just-6-months/articleshow/109318885.cms</div></div><img src="https://img.etimg.com/thumb/msid-109319070,width-1200,height-630,imgsize-31734,overlay-etpanache/photo.jpg" class="bookmark-image"/></a></figure><p id="83819665-b037-4a66-a82b-08f40397a0b9" class="">Searching and trying did not help</p><figure id="2a959ee4-9314-4a1c-86af-ba6ee8fe5f79" class="image"><a href="ShunyaCTF%20Aarambha%20d78f1ef5f76f46ada48efe2e01e24dc7/Untitled%202.png"><img style="width:708px" src="ShunyaCTF%20Aarambha%20d78f1ef5f76f46ada48efe2e01e24dc7/Untitled%202.png"/></a></figure><p id="502e715f-8d49-4b2f-bb4b-957fa896f43b" class="">After more of research we didn’t know but got </p><figure id="558a62cf-4ebe-4fa8-b2ab-a6210f7a3c66"><a href="https://www.usatoday.com/story/life/people/2018/09/08/cardi-b-and-nicki-minaj-fight-new-york-fashion-week-party/1237978002/" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Cardi B injured after fight with Nicki Minaj at New York Fashion Week party</div><div class="bookmark-description">Nicki Minaj and Cardi B were involved in a fight Friday night at a New York Fashion Week party, leaving Cardi with a mark on her head.</div></div><div class="bookmark-href"><img src="https://www.usatoday.com/favicon.ico" class="icon bookmark-icon"/>https://www.usatoday.com/story/life/people/2018/09/08/cardi-b-and-nicki-minaj-fight-new-york-fashion-week-party/1237978002/</div></div><img src="https://www.usatoday.com/gcdn/presto/2018/09/08/USAT/4fef3369-c847-4776-8ffd-045f000501b2-AP_APTOPIX_Harper_s_Bazaar_Icons_2018.jpg?crop=1084,606,x0,y0&amp;width=1084&amp;height=606&amp;format=pjpg&amp;auto=webp" class="bookmark-image"/></a></figure><p id="e23d0c80-eb1a-4cae-9ad6-c9b5382dfc13" class="">Since it had an event mentioned, I started digging deeper.<br/><br/>Later, after assistance, we got the confirmation about the artists and event.<br/></p><p id="ec9520c9-1e57-49e1-b443-75fcd12b6991" class="">Below is the snippet of the same.<br/><br/></p><figure id="ea5a2d7d-5e65-4a36-8301-9c8698d82365" class="image"><a href="ShunyaCTF%20Aarambha%20d78f1ef5f76f46ada48efe2e01e24dc7/Untitled%203.png"><img style="width:689px" src="ShunyaCTF%20Aarambha%20d78f1ef5f76f46ada48efe2e01e24dc7/Untitled%203.png"/></a></figure><p id="b88176fb-b496-4c24-a08d-5bf6c1883b52" class="">Then we corrected Minja to MInaj,<br/>Later one of our teammates PhantomByte told that event took place in 2018 and not 2023<br/></p><p id="4331dd12-1a66-43e2-b7cc-514c373e52bc" class="">Earlier we tried full names like New York Fashion Week.<br/><br/>hence, we got the flag.<br/></p><h3 id="d1a3b3f4-cf2b-47be-b029-7931b8704b48" class="">Flag: <code>0CTF{NYFW_2018_Cardi_Minaj}</code></h3><p id="75cdcdb7-aa00-4f20-bac7-af5a0f970094" class="">
+</p><h1 id="6d489376-cf28-4952-889b-3382f20d4ae7" class="">OSINT / 11.11.11.11</h1><p id="82ee4ddf-3b8f-4521-b358-d3441150e847" class="">
+</p><p id="3679a170-6c92-4978-b85a-7ff2afce4279" class="">First we read the description of the challenge and it points us to some mystery related to 11 people and a house. This in itself is a good hint and if you google it and scroll for some time you might find the correct direction but this challenge also has an attached file so lets look at that. The file is a poor quality image of some notes in hindi that look like some instructions for a religious practice or something like that. When we reverse search this image , our suspicions are confirmed , this challenge indeed points to the infamous burari family case in which a family of 11 commited suicide in their house. Now the second part of the question asks us to tell what&#x27;s on the ground and it mentions what is there &quot;now&quot; .I guessed that the challenge meant ground floor so I googled and found that the ground floor now hosts a diagnostic center by the name of dhruv diagnostic center. I tried submitting <code>0CTF{dhruv_diagnostic_center}</code>and voila it was the correct answer.</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

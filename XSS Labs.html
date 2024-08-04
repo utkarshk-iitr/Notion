@@ -1,0 +1,686 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>XSS Labs</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="a1d6a711-b138-47dd-9b91-f5d014279342" class="page sans"><header><h1 class="page-title"><span style="border-bottom:0.05em solid">XSS Labs</span></h1><p class="page-description"></p></header><div class="page-body"><h1 id="2ccb2523-7d4f-44d7-8a8f-299a3130a21a" class=""><span style="border-bottom:0.05em solid">PortSwigger XSS Labs</span></h1><h2 id="473c93c3-4571-4068-93cc-96acf7b8a939" class="">Lab 1 - Reflected <strong><strong>XSS into HTML context with nothing encoded</strong></strong></h2><p id="9f88d17d-4468-45af-8e2d-a71a9b2f793b" class="">First I tried searching anything (eg. abc), then <code>?search=</code> was appended to the URL then I modified the URL to <code>?search=&lt;script&gt;alert(101)&lt;/script&gt;</code> , Hurray! labs solved.</p><p id="b1da9105-4326-433c-b53e-16a6d0dd65f5" class="">
+</p><h2 id="f166f08f-85fd-445b-b2bc-a85a77a461db" class="">Lab 2 - Stored <strong><strong>XSS into HTML context with nothing encoded</strong></strong></h2><p id="298809d5-8918-49ed-b314-c99feeb61b07" class="">The question mentions the vulnerability in comment section. So I headed to comment section and wrote <code>&lt;script&gt;alert(101)&lt;/script&gt;</code> , also filled in the random values in the other fields. Solved the lab.</p><p id="2ecbfb52-1256-4dfb-84b4-cd4c502c7e0e" class="">
+</p><h2 id="14d3ccbc-366c-40b5-8e16-4aa07c3f0fc6" class="">Lab 3 - DOM XSS <strong><strong>in </strong></strong><code><strong><strong>document.write</strong></strong></code><strong><strong> sink using source </strong></strong><code><strong><strong>location.search</strong></strong></code></h2><p id="332ef98d-95c0-4107-ba50-5acc1c357e98" class="">I tried searching randomly (eg. xyz) in the search box, I also followed the method of Lab 1 but it didn’t work, then I looked into the source code and searched for <code>document.write</code> , I saw - </p><figure id="d8e54681-93d9-4c63-b1bc-8034bdc38c3c" class="image"><a href="XSS%20Labs%20a1d6a711b13847dd9b91f5d014279342/Screenshot_from_2024-01-26_20-00-12.png"><img style="width:1036px" src="XSS%20Labs%20a1d6a711b13847dd9b91f5d014279342/Screenshot_from_2024-01-26_20-00-12.png"/></a></figure><p id="d0f975c7-1b21-496a-b3c9-f9a047efde18" class="">So I analysed and made query  as : <code>“&gt;&lt;script&gt;alert(101)&lt;/script&gt;</code> . Mission accomplished.</p><p id="92ac1dd2-e799-403e-9587-7e4abf6ef5c0" class="">
+</p><h2 id="3dc90372-2070-4438-b63a-f32480992029" class="">Lab 4 - DOM XSS<strong><strong> in </strong></strong><code><strong><strong>innerHTML</strong></strong></code><strong><strong> sink using source </strong></strong><code><strong><strong>location.search</strong></strong></code></h2><p id="95683d58-e82b-4ac3-ac0c-f697ab67c505" class="">I searched random stuff and viewed the source code. And I saw that it uses <code>innerHTML</code> in the query so I modified the query to one of the HTML tags : <code>&lt;img src=1 onerror=alert(101)&gt;</code> Hurray question solved.</p><p id="8f433cd3-3c17-4cf0-9fbb-7bb76fbef198" class="">
+</p><h2 id="4c9f312f-8f66-4ccb-b37b-0f444a74e274" class="">Lab 5 - DOM XSS <strong><strong>in jQuery anchor </strong></strong><code><strong><strong>href</strong></strong></code><strong><strong> attribute sink using </strong></strong><code><strong><strong>location.search</strong></strong></code><strong><strong> source</strong></strong></h2><p id="d2d67f45-1cae-44f0-95f5-e53872b1c998" class="">I headed to the feedback form and filled up random values , then I checked the source code and found <code>href</code> so I modified the return path to <code>?returnPath=javascript:alert(101)</code> then I filled the form again with random values. And clicked the Back button , the alert appeared , Voila labs solved</p><p id="d18a33a3-5c5d-4c84-b625-32525103743a" class="">
+</p><h2 id="167bf76a-97e7-45ad-9d1b-fd8aeb253fe5" class="">Lab 6 - DOM XSS <strong><strong>in jQuery selector sink using a hashchange event</strong></strong></h2><p id="8959d3fe-bc2f-4907-a8e5-8925839fdc39" class="">I first viewed the source code and found that hash can be used to autoscroll. I opened the exploit page tried <code>&lt;img src=1 onerror=print()&gt;</code>  but that didn’t work. I tried google how to write exploit to access other website then I found <code>iframe</code> , I wrote <code>&lt;iframe src= &#x27;</code><code><a href="https://0a1900d304e2b7918038947500ff005d.web-security-academy.net/#">https://0a1900d304e2b7918038947500ff005d.web-security-academy.net/#</a></code><code>&#x27; onload=&#x27;&lt;img src=1 onerror=print()&gt;&#x27;&gt;</code>  , but this didn’t work. So google more and found that I have to add -</p><p id="6e4b9509-ed91-45fc-94cd-326e432c65a0" class=""><code>onload=&quot;this.src+=&#x27;&lt;img src=1 onerror=print()&gt;&#x27;&quot;</code> . Finally it worked. </p><p id="a4416b93-2b25-4ab6-8747-34ee5ebbff64" class=""><strong>This was a very a interesting question where I learnt </strong><strong><code>iframe</code></strong><strong> and </strong><strong><code>onload=”this.src+=”</code></strong></p><p id="4a72a8af-6a96-4ca6-80a3-c6599e632cf7" class="">
+</p><h2 id="1f941841-fd58-42bc-9707-07065323d433" class="">Lab 7 - Reflected <strong><strong>XSS into attribute with angle brackets HTML-encoded</strong></strong></h2><p id="ad749288-b5e8-4276-8a40-940a651adce8" class="">I first tried <code>&lt;script&gt;alert(101)&lt;/script&gt;</code> but it didn’t work , I viewed the source code and found <code>&lt; &gt;</code> were replaced. So I modified the query to <code>“ alert(101) “</code> but didn’t work. I searched for input attributes and found <code>onclick</code> and <code>onmousecover</code> . Modified query : <code>“onclick=”alert(101)</code>  exploit worked but labs not passed so tried <code>“ onmousecover=”alert(101)</code> , Hurray Labs passed.</p><p id="4de48424-1886-4057-bd76-5f3e61ceb984" class="">
+</p><h2 id="26e613e6-c6b1-437f-a0b5-df48d6c9da75" class="">Lab 8 - Stored <strong><strong>XSS into anchor </strong></strong><code><strong><strong>href</strong></strong></code><strong><strong> attribute with double quotes HTML-encoded</strong></strong></h2><p id="4d9b320d-ba8f-4a72-8a92-bdc434dfb1e1" class="">I first wrote a random comment and saw that author name had hyperlink to its website. So I wrote <code>javasript:alert(101)</code>  in the website column and it worked.</p><p id="e6f4bd76-46b4-4d7c-a538-1f64f9ea5137" class="">
+</p><h2 id="8145f049-41e3-45c1-a283-976cf76357ce" class="">Lab 9 - Reflected <strong><strong>XSS into a JavaScript string with angle brackets HTML encoded</strong></strong></h2><p id="1da857c5-252f-46d7-9e43-accdfa4dd528" class="">I searched a random string then viewed the source code. And I found this - </p><figure id="0f71f4d1-3d71-446a-801f-cf5f8e92bccc" class="image"><a href="XSS%20Labs%20a1d6a711b13847dd9b91f5d014279342/Screenshot_from_2024-01-26_23-58-50.png"><img style="width:1275px" src="XSS%20Labs%20a1d6a711b13847dd9b91f5d014279342/Screenshot_from_2024-01-26_23-58-50.png"/></a></figure><p id="7e9ee8a4-f2fa-4e8f-b605-d190f43cf016" class="">So I made the payload <code>‘; alert(101); //</code> , Mission accomplished.</p><p id="904a53ad-c38d-4126-98f6-a25c79090cc3" class="">
+</p><h1 id="50848af8-fcce-4e7a-a9c6-34fc548996ee" class=""><span style="border-bottom:0.05em solid">XSS Game</span></h1><h2 id="5d2bff12-8c8c-44e7-81dd-827a286bd5a4" class="">Lab 1 - </h2><p id="526c9968-52f5-47fc-ad17-24a435054a84" class="">Modify the query to : <code>?query=&lt;script&gt;alert(101)&lt;/script&gt;</code> and it works. </p><h2 id="1c2f8424-df5a-4058-aa28-82cee2f1eed3" class="">Lab 2 -</h2><p id="fbb0c93d-6cb9-42c3-81a1-f9082811efe2" class="">If we share post as : <code>&lt;img src=1 onerror=alert(101)&gt;</code> then we pass it.</p><h2 id="794e3b5c-7761-4ad8-b01f-2e4c8900b3e3" class="">Lab 3 - </h2><p id="e976b374-ae39-4251-adb7-f2000c2a5e31" class="">Modifying the URL to - <code>&#x27; &lt;img src=1 onerror=alert(101);&gt;</code> we accomplish the task.</p><h2 id="a4dedbdd-bfae-4d9b-abe3-fa5b938d3f80" class="">Lab 4 -</h2><p id="eac218e2-e37b-49c9-9c8b-caea8798a65a" class="">We view the source code and gave payload as: <code>3&#x27;);alert(101);//</code> </p><h2 id="a98908e3-891e-4b06-972f-cc3b0b893199" class="">Lab 5 - </h2><p id="60e2451f-4993-44a2-bd72-d99bab44b0d5" class="">After signup we see <code>next=confirm</code>  , if we modify <code>next=javascript:alert(101)</code> and click on next, we are done.</p><h2 id="9a267ccd-bd02-4aba-adf6-d946935219d3" class="">Lab 6 -</h2><p id="ec9cb921-4ae5-429d-a1b6-a1e9be362ab4" class="">First I tried doing <code>&lt;script&gt;alert()&lt;/script&gt;</code>  but didn’t work so I saw some hint and google some info then I got  <code>data</code> element so I gave the payload as <code>data:text/plain,alert()</code> , and finally it worked.</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
