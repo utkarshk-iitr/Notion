@@ -1,0 +1,12 @@
+If we are given a RSA encryption system where we can encrypt our plaintext like int(input())
+
+We can encrypt 2, 4, 8, and 16. Then we can know
+ct2 = pow(2,e,n)
+ct4 = pow(4,e,n)
+ct8 = pow(8,e,n)
+
+ct2**2 - ct4 = kn
+ct2**3 - ct8 = tn
+gcd(kn,tn) = n
+
+We get a number which is most probably n
